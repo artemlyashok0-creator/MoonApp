@@ -2,7 +2,7 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ головний, main ]
+    branches: [ main ]
 
 jobs:
   build:
