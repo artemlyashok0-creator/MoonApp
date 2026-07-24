@@ -22,8 +22,6 @@ jobs:
       
         
     - name: Build with Buildozer
-      env:
-        ANDROID_NDK_HOME: ""
       run: |
         yes | buildozer -v android debug
         
