@@ -42,10 +42,12 @@ jobs:
         pip install cython==0.29.36
         pip install buildozer
 
-    - name: Build with Buildozer
+        - name: Build with Buildozer
+      env:
+        ANDROID_NDK_HOME: ""
       run: |
         yes | buildozer -v android debug
-
+        
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
