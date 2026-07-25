@@ -25,8 +25,9 @@ jobs:
         pip install buildozer cython==0.29.36
         
     - name: Build with Buildozer
-      run: |
-        buildozer -v android debug || true
+      uses: ArtemSBulgakov/buildozer-action@v1 # або стандартний kivy/buildozer-action
+      with:
+        command: buildozer -v android debug
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
