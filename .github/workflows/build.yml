@@ -28,6 +28,7 @@ jobs:
     - name: Build with Buildozer
       run: |
         export PATH=$PATH:~/.local/bin
+        export P4A_ANDROID_SDK_ACCEPT_LICENSE=1
         buildozer --accept-all -v android debug
 
     - name: Upload APK
