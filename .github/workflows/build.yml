@@ -29,6 +29,8 @@ jobs:
       run: |
         export PATH=$PATH:~/.local/bin
         export P4A_ANDROID_SDK_ACCEPT_LICENSE=1
+        unset ANDROID_NDK_HOME
+        unset ANDROID_SDK_ROOT
         buildozer --accept-all -v android debug
 
     - name: Upload APK
