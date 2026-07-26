@@ -16,8 +16,9 @@ jobs:
       
     - name: Build with Buildozer
       run: |
-        export USER=buildozer
-        buildozer --accept-all -v android debug
+        useradd -ms /bin/bash buildozer
+        chown -R buildozer:buildozer .
+        su buildozer -c "buildozer --accept-all -v android debug"
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
