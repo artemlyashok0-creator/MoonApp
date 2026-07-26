@@ -12,3 +12,4 @@ android.api = 31
 android.minapi = 24
 # android.ndk = 25b
 android.accept_sdk_license = True
+log_level = 2
