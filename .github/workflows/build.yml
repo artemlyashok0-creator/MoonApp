@@ -10,12 +10,13 @@ jobs:
     container:
       image: kivy/buildozer:latest
 
-    steps:
-    
+    steps:   
     - name: Checkout code
       uses: actions/checkout@v4
+      
     - name: Build with Buildozer
       run: |
+        export USER=buildozer
         buildozer --accept-all -v android debug
         
     - name: Upload APK
