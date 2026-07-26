@@ -11,13 +11,13 @@ jobs:
       image: kivy/buildozer:latest
 
     steps:
+    
     - name: Checkout code
       uses: actions/checkout@v4
-
     - name: Build with Buildozer
       run: |
-        buildozer -v android debug
-
+        buildozer --accept-all -v android debug
+        
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
