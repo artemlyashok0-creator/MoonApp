@@ -28,7 +28,8 @@ jobs:
     - name: Build with Buildozer
       run: |
         export PATH=$PATH:~/.local/bin
-        unset ANDROID_NDK_ROOT
+        export ANDROID_NDK_HOME=/home/runner/.buildozer/android/platform/android-ndk-r25c
+        export ANDROID_NDK=/home/runner/.buildozer/android/platform/android-ndk-r25c
         export P4A_ANDROID_SDK_ACCEPT_LICENSE=1
         buildozer --accept-all -v android debug
         
