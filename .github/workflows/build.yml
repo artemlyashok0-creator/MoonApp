@@ -21,6 +21,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libsqlite3-dev libreadline-dev libffi-dev libssl-dev
+        # Оновлюємо aclocal, щоб він не сварився на старі макроси libffi
+        autoreconf -ivf || true
+        pip install --upgrade p
         pip install --upgrade pip
         pip install --user --upgrade buildozer cython
         pip install --user --upgrade git+https://github.com/kivy/python-for-android.git
