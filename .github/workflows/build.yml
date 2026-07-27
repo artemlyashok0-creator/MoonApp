@@ -26,10 +26,11 @@ jobs:
         pip install --user --upgrade git+https://github.com/kivy/python-for-android.git
         
     - name: Build with Buildozer
+      env:
+        ANDROID_NDK_ROOT: /home/runner/.buildozer/android/platform/android-ndk-r25c
+        ANDROID_NDK: /home/runner/.buildozer/android/platform/android-ndk-r25c
       run: |
         export PATH=$PATH:~/.local/bin
-        export ANDROID_NDK_HOME=/home/runner/.buildozer/android/platform/android-ndk-r25c
-        export ANDROID_NDK=/home/runner/.buildozer/android/platform/android-ndk-r25c
         export P4A_ANDROID_SDK_ACCEPT_LICENSE=1
         buildozer --accept-all -v android debug
         
