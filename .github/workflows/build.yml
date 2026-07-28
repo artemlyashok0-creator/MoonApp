@@ -2,7 +2,8 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,22 +22,26 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libsqlite3-dev libreadline-dev libffi-dev libssl-dev
-        # Оновлюємо aclocal, щоб він не сварився на старі макроси libffi
-        autoreconf -ivf || true
-        pip install --upgrade p
         pip install --upgrade pip
         pip install --user --upgrade buildozer cython
         pip install --user --upgrade git+https://github.com/kivy/python-for-android.git
-        
+
     - name: Build with Buildozer
       env:
         ANDROID_NDK_ROOT: /home/runner/.buildozer/android/platform/android-ndk-r25c
         ANDROID_NDK: /home/runner/.buildozer/android/platform/android-ndk-r25c
+        P4A_ANDROID_SDK_ACCEPT_LICENSE: 1
       run: |
         export PATH=$PATH:~/.local/bin
-        export P4A_ANDROID_SDK_ACCEPT_LICENSE=1
-        buildozer --accept-all --debug android debug
-        
+        buildozer -v --accept-all android debug
+
+    # Якщо збірка впаде, цей крок одразу надрукує повний лог помилки в консоль GitHub Actions
+    - name: Print Build Log on Failure
+      if: failure()
+      run: |
+        echo "=== SHOWING BUILDOZER LOGS ==="
+        find .buildozer -name "build.log" -exec cat {} + || true
+
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
@@ -44,5 +49,12 @@ jobs:
         path: |
           bin/*.apk
           /**/*.apk
-          
-          
+
+    # Додатковий крок для завантаження файлу логу, якщо щось піде не так
+    - name: Upload Build Log Artifact
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: buildozer-error-log
+        path: .buildozer/**/build.log
+        
