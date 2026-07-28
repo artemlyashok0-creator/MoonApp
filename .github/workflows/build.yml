@@ -48,8 +48,8 @@ jobs:
         name: my-app-apk
         path: |
           bin/*.apk
-          /**/*.apk
-
+          app/bin/*.apk
+          
     # Додатковий крок для завантаження файлу логу, якщо щось піде не так
     - name: Upload Build Log Artifact
       if: failure()
