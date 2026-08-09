@@ -1,69 +1,53 @@
-import os
-import json
-import requests
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.button import Button
+import random
 
-class MoonApp:
-    def __init__(self):
-        self.assets = "assets"
-        self.config_file = "settings.json"
-        self.api_key = self.load_api_key()
-        self.running = True
+class MoonAppUI(BoxLayout):
+    def __init__(self, **kwargs):
+        super(MoonAppUI, self).__init__(**kwargs)
+        self.orientation = 'vertical'
+        self.padding = 30
+        self.spacing = 20
 
-    def load_api_key(self):
-        try:
-            with open(self.config_file, 'r') as f:
-                data = json.load(f)
-                return data.get("api_key")
-        except FileNotFoundError:
-            print("Помилка: файл settings.json не знайдено.")
-            return None
+        # Список повідомлень для натхнення
+        self.messages = [
+            "Світло Місяця сьогодні особливо яскраве.",
+            "Не забувай, що навіть маленькі кроки ведуть до великих звершень.",
+            "Твоя енергія створює навколо тебе новий простір.",
+            "Зроби перерву, ти працюєш краще, ніж будь-хто інший.",
+            "Система функціонує в ідеальному ритмі завдяки тобі."
+        ]
 
-    def test_connection(self):
-        if not self.api_key:
-            print("Помилка: API ключ відсутній.")
-            return
+        # Заголовок / текст на екрані
+        self.label = Label(
+            text="--- Вітаю у твоєму\nцифровому просторі ---",
+            font_size='20sp',
+            halign='center',
+            valign='middle'
+        )
+        self.label.bind(size=self.label.setter('text_size'))
+        self.add_widget(self.label)
 
-        url = "https://api.pexels.com/v1/search?query=nature&per_page=1"
-        headers = {"Authorization": self.api_key}
+        # Кнопка для зміни тексту
+        self.btn = Button(
+            text="Отримати натхнення",
+            font_size='18sp',
+            size_hint=(1, 0.3)
+        )
+        self.btn.bind(on_press=self.update_message)
+        self.add_widget(self.btn)
 
-        try:
-            response = requests.get(url, headers=headers)
-            if response.status_code == 200:
-                print("--- Зв'язок з API успішний! ---")
-            else:
-                print(f"Помилка з'єднання: {response.status_code}")
-        except Exception as e:
-            print(f"Помилка запиту: {e}")
+    def update_message(self, instance):
+        # Вибираємо випадкове повідомлення при натисканні
+        new_thought = random.choice(self.messages)
+        self.label.text = f"[Текст]:\n{new_thought}"
 
-    def start(self):
-        if not os.path.exists(self.assets):
-            os.makedirs(self.assets)
-        print("--- System Online ---")
-        self.test_connection()
-
-    def process_visual(self):
-        print("Виклик модуля візуалізації...")
-        # Тут згодом буде логіка запиту до API для отримання фото
-
-    def run(self):
-        while self.running:
-            try:
-                choice = input("\n[1] Статус API\n[2] Візуалізація\n[0] Вихід: ")
-                
-                if choice == "1":
-                    self.test_connection()
-                elif choice == "2":
-                    self.process_visual()
-                elif choice == "0":
-                    self.running = False
-                else:
-                    print("Невірний запит.")
-            except Exception as e:
-                print(f"Помилка системи: {e}")
+class MoonApp(App):
+    def build(self):
+        self.title = "MoonApp"
+        return MoonAppUI()
 
 if __name__ == "__main__":
-    app = MoonApp()
-    app.start()
-    app.run()
-
-
+    MoonApp().run()
